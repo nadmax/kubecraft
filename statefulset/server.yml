@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: minecraft-server
+  namespace: minecraft
+spec:
+  selector:
+    matchLabels:
+      app: minecraft-server
+  template:
+    metadata:
+      labels:
+        app: minecraft-server
+    spec:
+      containers:
+        - name: minecraft-server
+          image: itzg/minecraft-server
+          env:
+            - name: EULA
+              value: "TRUE"
+            - name: MODE
+              value: "survival"
+            - name: TYPE
+              value: "vanilla"
+            - name: INIT_MEMORY
+              value: 4G
+            - name: MAX_MEMORY
+              value: 6G
+            ## - name: CF_SERVER_MOD
+            ## value: "/modpacks/your-modpack.zip"
+            - name: ALLOW_FLIGHT
+              value: "TRUE"
+            - name: USE_AIKAR_FLAGS
+              value: "TRUE"
+            - name: RCON_PASSWORD
+              value: "rcon-password"
+          ports:
+            - name: minecraft
+              containerPort: 25565
+          resources:
+            requests:
+              cpu: 2
+              memory: "4Gi"
+            limits:
+              cpu: 4
+              memory: "6Gi"
+          readinessProbe:
+            tcpSocket:
+              port: 25565
+            initialDelaySeconds: 60
+          livenessProbe:
+            tcpSocket:
+              port: 25565
+            initialDelaySeconds: 120
+          volumeMounts:
+            - name: minecraft-data
+              mountPath: /data
+            # - name: modpacks
+            # mountPath: /modpacks
+      volumes:
+        - name: minecraft-data
+          persistentVolumeClaim:
+            claimName: minecraft-data
+        # - name: modpacks
+        # persistentVolumeClaim:
+        # claimName: modpacks
