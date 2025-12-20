@@ -18,16 +18,20 @@ spec:
           env:
             - name: EULA
               value: "TRUE"
+            - name: VERSION
+              value: "1.20.1"
             - name: MODE
               value: "survival"
             - name: TYPE
-              value: "vanilla"
+              value: "FORGE"
+            - name: FORGEVERSION
+              value: 47.4.10
             - name: INIT_MEMORY
               value: 4G
             - name: MAX_MEMORY
               value: 6G
-            ## - name: CF_SERVER_MOD
-            ## value: "/modpacks/your-modpack.zip"
+            - name: GENERIC_PACK
+              value: "/modpacks/mods.zip"
             - name: ALLOW_FLIGHT
               value: "TRUE"
             - name: USE_AIKAR_FLAGS
@@ -40,7 +44,7 @@ spec:
           resources:
             requests:
               cpu: 2
-              memory: "4Gi"
+              memory: "6Gi"
             limits:
               cpu: 4
               memory: "6Gi"
@@ -55,12 +59,12 @@ spec:
           volumeMounts:
             - name: minecraft-data
               mountPath: /data
-            # - name: modpacks
-            # mountPath: /modpacks
+            - name: modpacks
+              mountPath: /modpacks
       volumes:
         - name: minecraft-data
           persistentVolumeClaim:
             claimName: minecraft-data
-        # - name: modpacks
-        # persistentVolumeClaim:
-        # claimName: modpacks
+        - name: modpacks
+          persistentVolumeClaim:
+            claimName: modpacks
