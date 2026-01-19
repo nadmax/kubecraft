@@ -1,3 +1,3 @@
-# MineKube
+# Kubecraft
 
 Run Minecraft on Kubernetes
